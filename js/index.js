@@ -35,6 +35,38 @@ $(function($) {
     fixDiv();
 });
 
+/** Anchor smooth scroll **/
+$(function($) {
+    $('a[href*="#"]').not('[href="#"]').not('[href="#0"]').click(function(event) {
+        if (
+          location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+          &&
+          location.hostname == this.hostname
+        ) {
+            // Определяем элемент к которому нужно отскроллить
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+            // Ппроверка на существование элемента
+            if (target.length) {
+                event.preventDefault();
+                $('html, body').animate({
+                    scrollTop: target.offset().top - 120
+                }, 1000, function() {
+                    // Смена фокуса после анимации для правильной навигации с клавиатуры
+                    var $target = $(target);
+                    $target.focus();
+                    if ($target.is(":focus")) { // Проверка если уже сфокусирован
+                        return false;
+                    } else {
+                        $target.attr('tabindex','-1'); // Добавляем tabindex для нефокусируемых элементов
+                        $target.focus();
+                    };
+                });
+            }
+        }
+    });
+});
+
 // Якщо потрібен вивід дати та час + хвилин, тоді до спана з датою додаємо клас "time" <span class="date-1 time"></span>.
 // Працює як в порядку спадання, так і в порядку зростання.
 
